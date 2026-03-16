@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Dark barbershop theme — gold/amber primary on dark background */
+  --primary: 38 92% 50%;
+  --primary-foreground: 20 14% 4%;
+
+  --secondary: 30 6% 20%;
+  --secondary-foreground: 38 92% 50%;
+
+  --background: 20 14% 4%;
+  --foreground: 40 10% 92%;
+
+  --muted: 30 6% 14%;
+  --muted-foreground: 40 5% 55%;
+
+  --accent: 38 92% 50%;
+  --accent-foreground: 20 14% 4%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 30 6% 18%;
+  --input: 30 6% 18%;
+  --ring: 38 92% 50%;
+
+  --card: 20 14% 7%;
+  --card-foreground: 40 10% 92%;
+
+  --radius: 0.5rem;
+
+  /* Named tokens for direct CSS usage */
+  --color-primary: hsl(38, 92%, 50%);
+  --color-primary-foreground: hsl(20, 14%, 4%);
+  --color-secondary: hsl(30, 6%, 20%);
+  --color-secondary-foreground: hsl(38, 92%, 50%);
+  --color-background: hsl(20, 14%, 4%);
+  --color-foreground: hsl(40, 10%, 92%);
+  --color-muted: hsl(30, 6%, 14%);
+  --color-muted-foreground: hsl(40, 5%, 55%);
+  --color-border: hsl(30, 6%, 18%);
+  --color-card: hsl(20, 14%, 7%);
+  --color-card-foreground: hsl(40, 10%, 92%);
+  --color-destructive: hsl(0, 72%, 51%);
+  --color-destructive-foreground: hsl(0, 0%, 98%);
+}

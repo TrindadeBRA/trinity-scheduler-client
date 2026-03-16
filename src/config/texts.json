@@ -1,0 +1,54 @@
+{
+  "login": {
+    "titulo": "Bem-vindo",
+    "subtitulo": "Informe seu telefone para continuar",
+    "placeholder": "(11) 99999-9999",
+    "botaoEntrar": "Entrar"
+  },
+  "booking": {
+    "etapas": ["Serviço", "Profissional", "Data e Horário", "Confirmação"],
+    "servico": {
+      "titulo": "Escolha o serviço",
+      "subtitulo": "Selecione o serviço que deseja agendar"
+    },
+    "profissional": {
+      "titulo": "Escolha o profissional",
+      "subtitulo": "Selecione com quem deseja ser atendido",
+      "semPreferencia": "Sem preferência"
+    },
+    "dataHorario": {
+      "titulo": "Escolha a data e horário",
+      "subtitulo": "Selecione quando deseja ser atendido",
+      "semHorarios": "Nenhum horário disponível para esta data"
+    },
+    "confirmacao": {
+      "titulo": "Confirme seu agendamento",
+      "botaoConfirmar": "Confirmar agendamento",
+      "botaoVoltar": "Voltar e editar"
+    },
+    "sucesso": {
+      "titulo": "Agendamento confirmado!",
+      "mensagem": "Seu agendamento foi realizado com sucesso.",
+      "botaoNovo": "Agendar novamente"
+    }
+  },
+  "agendamentos": {
+    "titulo": "Meus agendamentos",
+    "proximos": "Próximos",
+    "anteriores": "Anteriores",
+    "cancelar": "Cancelar agendamento",
+    "confirmarCancelamento": "Tem certeza que deseja cancelar este agendamento?",
+    "vazio": "Nenhum agendamento encontrado"
+  },
+  "validacao": {
+    "apenasNumeros": "O telefone deve conter apenas números",
+    "telefoneMinimo": "O telefone deve ter no mínimo 10 dígitos",
+    "telefoneMaximo": "O telefone deve ter no máximo 15 dígitos"
+  },
+  "geral": {
+    "carregando": "Carregando...",
+    "erro": "Ocorreu um erro. Tente novamente.",
+    "tentarNovamente": "Tentar novamente",
+    "sair": "Sair"
+  }
+}
