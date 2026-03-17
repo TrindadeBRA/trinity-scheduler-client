@@ -10,15 +10,14 @@ export function useAvailableSlots(
   date: string | null | undefined
 ) {
   const slotsQuery = useQuery<TimeSlot[]>({
-    queryKey: ["slots", professionalId, date],
-    queryFn: () => getAvailableSlots(professionalId!, date!),
-    enabled: !!professionalId && !!date,
+    queryKey: ["slots", professionalId ?? "any", date],
+    queryFn: () => getAvailableSlots(professionalId ?? null, date!),
+    enabled: !!date,
   });
 
   const disabledDatesQuery = useQuery<string[]>({
-    queryKey: ["disabledDates", professionalId],
-    queryFn: () => getDisabledDates(professionalId!),
-    enabled: !!professionalId,
+    queryKey: ["disabledDates", professionalId ?? "any"],
+    queryFn: () => getDisabledDates(professionalId ?? null),
   });
 
   return {

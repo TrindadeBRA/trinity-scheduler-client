@@ -135,7 +135,7 @@ export function AppointmentDetailPage() {
                 <Button variant="ghost" className="flex-1" onClick={() => { setShowCancelForm(false); setCancelReason(""); setReasonError(false); }}>
                   Voltar
                 </Button>
-                <Button variant="primary" className="flex-1 bg-destructive text-destructive-foreground hover:opacity-90" loading={isPending} onClick={handleCancelSubmit}>
+                <Button variant="primary" className="flex-1 bg-destructive text-destructive-foreground hover:opacity-90" loading={isPending} disabled={!cancelReason.trim()} onClick={handleCancelSubmit}>
                   Confirmar cancelamento
                 </Button>
               </div>
