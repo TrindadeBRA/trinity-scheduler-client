@@ -3,6 +3,7 @@ import { cn } from '../../lib/utils';
 import { useBookingStore } from '../../stores/bookingStore';
 import { useAvailableSlots } from '../../hooks/useAvailableSlots';
 import { TimeSlotGrid } from './TimeSlotGrid';
+import { Button } from '../ui/Button';
 import texts from '../../config/texts.json';
 
 function generateNext30Days(): string[] {
@@ -34,7 +35,14 @@ export function DateTimeSelection() {
   const days = generateNext30Days();
 
   const handleDateSelect = (date: string) => { setSelectedDate(date); setSelectedTime(null); };
-  const handleTimeSelect = (time: string) => { setSelectedTime(time); if (selectedDate) { setDateTime(selectedDate, time); nextStep(); } };
+  const handleTimeSelect = (time: string) => { setSelectedTime(time); };
+
+  const handleContinue = () => {
+    if (selectedDate && selectedTime) {
+      setDateTime(selectedDate, selectedTime);
+      nextStep();
+    }
+  };
 
   return (
     <div className="p-4 flex flex-col gap-4">
@@ -69,6 +77,11 @@ export function DateTimeSelection() {
         </div>
       </div>
       {selectedDate && <TimeSlotGrid slots={slots} selectedTime={selectedTime} onSelect={handleTimeSelect} isLoading={isLoading} />}
+      {selectedDate && selectedTime && (
+        <Button variant="primary" onClick={handleContinue} className="mt-2">
+          {texts.booking.dataHorario.botaoContinuar}
+        </Button>
+      )}
     </div>
   );
 }

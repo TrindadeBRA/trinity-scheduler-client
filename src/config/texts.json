@@ -19,12 +19,14 @@
     "profissional": {
       "titulo": "Escolha o profissional",
       "subtitulo": "Selecione com quem deseja ser atendido",
-      "semPreferencia": "Sem preferência"
+      "semPreferencia": "Sem preferência",
+      "botaoContinuar": "Continuar"
     },
     "dataHorario": {
       "titulo": "Escolha a data e horário",
       "subtitulo": "Selecione quando deseja ser atendido",
-      "semHorarios": "Nenhum horário disponível para esta data"
+      "semHorarios": "Nenhum horário disponível para esta data",
+      "botaoContinuar": "Continuar"
     },
     "confirmacao": {
       "titulo": "Confirme seu agendamento",

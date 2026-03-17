@@ -13,7 +13,7 @@ export function MobileLayout({ children }: MobileLayoutProps) {
   return (
     <div className="flex flex-col min-h-screen w-full bg-background">
       <Header />
-      <main className="flex-1 overflow-y-auto px-4 py-6 text-foreground">
+      <main className="flex-1 overflow-y-auto px-4 py-6 text-foreground relative z-0">
         {children}
       </main>
       <nav className="sticky bottom-0 border-t border-border bg-card/95 backdrop-blur-sm">
