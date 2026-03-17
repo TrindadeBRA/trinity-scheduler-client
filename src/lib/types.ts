@@ -5,6 +5,14 @@ export interface Service {
   price: number;
   description: string;
   icon?: string; // Lucide icon name
+  image?: string; // URL
+}
+
+export interface AddonService {
+  id: string;
+  name: string;
+  duration: number;
+  price: number;
 }
 
 export interface Professional {

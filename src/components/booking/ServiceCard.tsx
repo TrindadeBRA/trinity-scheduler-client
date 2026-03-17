@@ -1,15 +1,7 @@
-import {
-  Scissors, User, Star, Zap, Droplets, Clock, Sparkles, Heart, Smile,
-  type LucideIcon,
-} from "lucide-react";
+import { Clock } from "lucide-react";
 import { Card } from "../ui/Card";
 import { formatCurrency } from "../../lib/utils";
 import type { Service } from "../../lib/types";
-
-const ICON_MAP: Record<string, LucideIcon> = {
-  scissors: Scissors, user: User, star: Star, zap: Zap, droplets: Droplets,
-  clock: Clock, sparkles: Sparkles, heart: Heart, smile: Smile,
-};
 
 interface ServiceCardProps {
   service: Service;
@@ -18,23 +10,30 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
-  const IconComponent = service.icon ? (ICON_MAP[service.icon] ?? Clock) : Clock;
-
   return (
-    <Card variant="selectable" selected={selected} onClick={onSelect}>
-      <div className="flex items-start gap-3">
-        <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-primary text-primary-foreground">
-          <IconComponent size={20} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2">
-            <h3 className="font-semibold text-sm truncate text-card-foreground">{service.name}</h3>
-            <span className="font-bold text-sm flex-shrink-0 text-primary">{formatCurrency(service.price)}</span>
+    <Card variant="selectable" selected={selected} onClick={onSelect} className="p-0 overflow-hidden">
+      <div className="flex">
+        {service.image && (
+          <img
+            src={service.image}
+            alt={service.name}
+            className="w-24 h-24 sm:w-28 sm:h-28 object-cover shrink-0"
+          />
+        )}
+        <div className="flex-1 min-w-0 p-3 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="font-semibold text-sm truncate text-card-foreground">{service.name}</h3>
+              <span className="font-bold text-sm flex-shrink-0 text-primary">{formatCurrency(service.price)}</span>
+            </div>
+            {service.description && (
+              <p className="text-xs mt-1 line-clamp-2 text-muted-foreground">{service.description}</p>
+            )}
           </div>
-          <p className="text-xs mt-0.5 text-muted-foreground">{service.duration} min</p>
-          {service.description && (
-            <p className="text-xs mt-1 line-clamp-2 text-muted-foreground">{service.description}</p>
-          )}
+          <div className="flex items-center gap-1 mt-1.5 text-muted-foreground">
+            <Clock className="h-3 w-3" />
+            <span className="text-xs">{service.duration} min</span>
+          </div>
         </div>
       </div>
     </Card>

@@ -9,12 +9,17 @@ import texts from '../../config/texts.json';
 export function BookingConfirmation() {
   const navigate = useNavigate();
   const selectedService = useBookingStore((s) => s.selectedService);
+  const selectedAddons = useBookingStore((s) => s.selectedAddons);
   const selectedProfessional = useBookingStore((s) => s.selectedProfessional);
   const selectedDate = useBookingStore((s) => s.selectedDate);
   const selectedTime = useBookingStore((s) => s.selectedTime);
   const prevStep = useBookingStore((s) => s.prevStep);
   const clientId = useAuthStore((s) => s.clientId);
   const { mutate, isPending, isError } = useCreateAppointment();
+
+  const addonsTotal = selectedAddons.reduce((sum, a) => sum + a.price, 0);
+  const totalPrice = (selectedService?.price ?? 0) + addonsTotal;
+  const totalDuration = (selectedService?.duration ?? 0) + selectedAddons.reduce((sum, a) => sum + a.duration, 0);
 
   const handleConfirm = () => {
     if (!clientId || !selectedService || !selectedDate || !selectedTime) return;
@@ -35,9 +40,25 @@ export function BookingConfirmation() {
             <Row label="Preço" value={formatCurrency(selectedService.price)} />
           </>
         )}
+        {selectedAddons.length > 0 && (
+          <>
+            <div className="border-t border-border my-1" />
+            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Adicionais</span>
+            {selectedAddons.map((addon) => (
+              <Row key={addon.id} label={`${addon.name} (${addon.duration} min)`} value={formatCurrency(addon.price)} />
+            ))}
+          </>
+        )}
+        <div className="border-t border-border my-1" />
         <Row label="Profissional" value={selectedProfessional?.name ?? texts.booking.profissional.semPreferencia} />
         {selectedDate && <Row label="Data" value={formatDate(selectedDate)} />}
         {selectedTime && <Row label="Horário" value={selectedTime} />}
+        <div className="border-t border-border my-1" />
+        <Row label="Duração total" value={`${totalDuration} min`} />
+        <div className="flex justify-between items-center gap-2">
+          <span className="text-sm font-semibold text-foreground">Total</span>
+          <span className="text-base font-bold text-primary">{formatCurrency(totalPrice)}</span>
+        </div>
       </div>
       {isError && <p className="text-sm text-center text-destructive">{texts.geral.erro}</p>}
       <div className="flex flex-col gap-3">

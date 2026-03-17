@@ -11,6 +11,11 @@
       "titulo": "Escolha o serviço",
       "subtitulo": "Selecione o serviço que deseja agendar"
     },
+    "adicionais": {
+      "titulo": "Serviços adicionais",
+      "subtitulo": "Complemente seu atendimento (opcional)",
+      "botaoContinuar": "Continuar"
+    },
     "profissional": {
       "titulo": "Escolha o profissional",
       "subtitulo": "Selecione com quem deseja ser atendido",
