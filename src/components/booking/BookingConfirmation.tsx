@@ -5,6 +5,7 @@ import { useCreateAppointment } from '../../hooks/useCreateAppointment';
 import { Button } from '../ui/Button';
 import { formatCurrency, formatDate } from '../../lib/utils';
 import texts from '../../config/texts.json';
+import { Calendar, Clock, User, Scissors } from 'lucide-react';
 
 export function BookingConfirmation() {
   const navigate = useNavigate();
@@ -30,37 +31,105 @@ export function BookingConfirmation() {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-4 text-foreground">
+    <div className="flex flex-col gap-5 p-4 text-foreground">
       <h2 className="text-xl font-display font-semibold">{texts.booking.confirmacao.titulo}</h2>
-      <div className="rounded-lg p-4 flex flex-col gap-3 bg-card border border-border">
-        {selectedService && (
-          <>
-            <Row label="Serviço" value={selectedService.name} />
-            <Row label="Duração" value={`${selectedService.duration} min`} />
-            <Row label="Preço" value={formatCurrency(selectedService.price)} />
-          </>
-        )}
-        {selectedAddons.length > 0 && (
-          <>
-            <div className="border-t border-border my-1" />
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Adicionais</span>
+
+      {/* Serviço principal */}
+      {selectedService && (
+        <div className="flex items-center gap-3 rounded-lg p-3 bg-card border border-border">
+          {selectedService.image ? (
+            <img src={selectedService.image} alt={selectedService.name} className="h-14 w-14 rounded-lg object-cover shrink-0" />
+          ) : (
+            <div className="h-14 w-14 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+              <Scissors className="h-6 w-6 text-primary" />
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold">{selectedService.name}</p>
+            <p className="text-xs text-muted-foreground">{selectedService.duration} min</p>
+          </div>
+          <span className="text-sm font-semibold text-primary shrink-0">{formatCurrency(selectedService.price)}</span>
+        </div>
+      )}
+
+      {/* Adicionais */}
+      {selectedAddons.length > 0 && (
+        <div className="rounded-lg border border-border overflow-hidden">
+          <div className="px-3 py-2 bg-secondary/50">
+            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Adicionais</span>
+          </div>
+          <div className="divide-y divide-border">
             {selectedAddons.map((addon) => (
-              <Row key={addon.id} label={`${addon.name} (${addon.duration} min)`} value={formatCurrency(addon.price)} />
+              <div key={addon.id} className="flex items-center gap-3 px-3 py-2.5 bg-card">
+                {addon.image ? (
+                  <img src={addon.image} alt={addon.name} className="h-8 w-8 rounded-md object-cover shrink-0" />
+                ) : (
+                  <div className="h-8 w-8 rounded-md bg-warning/10 flex items-center justify-center shrink-0">
+                    <Scissors className="h-3.5 w-3.5 text-warning" />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium">{addon.name}</p>
+                  <p className="text-[11px] text-muted-foreground">{addon.duration} min</p>
+                </div>
+                <span className="text-sm font-medium text-primary shrink-0">{formatCurrency(addon.price)}</span>
+              </div>
             ))}
-          </>
-        )}
-        <div className="border-t border-border my-1" />
-        <Row label="Profissional" value={selectedProfessional?.name ?? texts.booking.profissional.semPreferencia} />
-        {selectedDate && <Row label="Data" value={formatDate(selectedDate)} />}
-        {selectedTime && <Row label="Horário" value={selectedTime} />}
-        <div className="border-t border-border my-1" />
-        <Row label="Duração total" value={`${totalDuration} min`} />
-        <div className="flex justify-between items-center gap-2">
-          <span className="text-sm font-semibold text-foreground">Total</span>
-          <span className="text-base font-bold text-primary">{formatCurrency(totalPrice)}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Data, horário e profissional */}
+      <div className="rounded-lg p-3 bg-card border border-border flex flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center shrink-0">
+            {selectedProfessional?.avatar ? (
+              <img src={selectedProfessional.avatar} alt={selectedProfessional.name} className="h-9 w-9 rounded-full object-cover" />
+            ) : (
+              <User className="h-4 w-4 text-muted-foreground" />
+            )}
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Profissional</p>
+            <p className="text-sm font-medium">{selectedProfessional?.name ?? texts.booking.profissional.semPreferencia}</p>
+          </div>
+        </div>
+        <div className="flex gap-4">
+          {selectedDate && (
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <div>
+                <p className="text-xs text-muted-foreground">Data</p>
+                <p className="text-sm font-medium">{formatDate(selectedDate)}</p>
+              </div>
+            </div>
+          )}
+          {selectedTime && (
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-muted-foreground" />
+              <div>
+                <p className="text-xs text-muted-foreground">Horário</p>
+                <p className="text-sm font-medium">{selectedTime}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Resumo total */}
+      <div className="rounded-lg p-4 bg-primary/5 border border-primary/20">
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-xs text-muted-foreground">Duração total</span>
+          <span className="text-xs text-muted-foreground">{totalDuration} min</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="text-sm font-semibold">Total</span>
+          <span className="text-lg font-bold text-primary">{formatCurrency(totalPrice)}</span>
+        </div>
+      </div>
+
       {isError && <p className="text-sm text-center text-destructive">{texts.geral.erro}</p>}
+
       <div className="flex flex-col gap-3">
         <Button variant="primary" loading={isPending} onClick={handleConfirm} disabled={isPending}>
           {texts.booking.confirmacao.botaoConfirmar}
@@ -74,15 +143,6 @@ export function BookingConfirmation() {
           {texts.booking.confirmacao.botaoVoltar}
         </Button>
       </div>
-    </div>
-  );
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex justify-between items-center gap-2">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium text-foreground">{value}</span>
     </div>
   );
 }

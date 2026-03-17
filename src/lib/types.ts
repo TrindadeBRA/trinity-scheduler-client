@@ -13,6 +13,7 @@ export interface AddonService {
   name: string;
   duration: number;
   price: number;
+  image?: string; // URL
 }
 
 export interface Professional {

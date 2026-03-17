@@ -64,12 +64,15 @@ export function ServiceSelection() {
                       type="button"
                       onClick={() => toggleAddon(addon)}
                       className={cn(
-                        "flex items-center justify-between gap-3 p-3 rounded-lg border text-left transition-all",
+                        "flex items-center gap-3 p-3 rounded-lg border text-left transition-all",
                         selected
                           ? "border-primary bg-primary/5"
                           : "border-border bg-card hover:border-primary/30"
                       )}
                     >
+                      {addon.image && (
+                        <img src={addon.image} alt={addon.name} className="h-10 w-10 rounded-md object-cover shrink-0" />
+                      )}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-card-foreground">{addon.name}</p>
                         <p className="text-xs text-muted-foreground">{addon.duration} min</p>
