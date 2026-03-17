@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { CalendarPlus, CalendarCheck } from "lucide-react";
 import { Header } from "./Header";
 
 interface MobileLayoutProps {
@@ -15,23 +16,28 @@ export function MobileLayout({ children }: MobileLayoutProps) {
       <main className="flex-1 overflow-y-auto px-4 py-6 text-foreground">
         {children}
       </main>
-      <nav className="sticky bottom-0 flex border-t border-border bg-card">
-        <NavLink to="/booking" active={pathname.startsWith("/booking")}>Agendar</NavLink>
-        <NavLink to="/appointments" active={pathname.startsWith("/appointments")}>Agendamentos</NavLink>
+      <nav className="sticky bottom-0 border-t border-border bg-card/95 backdrop-blur-sm">
+        <div className="flex items-center">
+          <NavLink to="/booking" active={pathname.startsWith("/booking")} icon={<CalendarPlus className="h-5 w-5" />} label="Agendar" />
+          <div className="w-px h-8 bg-border" />
+          <NavLink to="/appointments" active={pathname.startsWith("/appointments")} icon={<CalendarCheck className="h-5 w-5" />} label="Agendamentos" />
+        </div>
       </nav>
     </div>
   );
 }
 
-function NavLink({ to, active, children }: { to: string; active: boolean; children: ReactNode }) {
+function NavLink({ to, active, icon, label }: { to: string; active: boolean; icon: ReactNode; label: string }) {
   return (
     <Link
       to={to}
-      className={`flex-1 flex items-center justify-center py-3 text-sm font-medium transition-colors ${
-        active ? "text-primary" : "text-muted-foreground"
+      className={`relative flex-1 flex flex-col items-center justify-center gap-1 py-3 transition-colors ${
+        active ? "text-primary" : "text-muted-foreground hover:text-foreground"
       }`}
     >
-      {children}
+      {icon}
+      <span className="text-xs font-medium">{label}</span>
+      {active && <div className="absolute bottom-0 h-0.5 w-12 rounded-full bg-primary" />}
     </Link>
   );
 }
