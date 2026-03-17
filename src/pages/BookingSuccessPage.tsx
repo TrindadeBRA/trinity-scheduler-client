@@ -1,9 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, CalendarPlus } from 'lucide-react';
 import { useBookingStore } from '../stores/bookingStore';
 import { Button } from '../components/ui/Button';
-import { formatCurrency, formatDate } from '../lib/utils';
+import { formatCurrency, formatDate, buildGoogleCalendarUrl } from '../lib/utils';
 import texts from '../config/texts.json';
+import niche from '../config/niche.json';
 import type { Appointment } from '../lib/types';
 
 export function BookingSuccessPage() {
@@ -13,6 +14,16 @@ export function BookingSuccessPage() {
   const appointment: Appointment | undefined = location.state?.appointment;
 
   const handleBookAgain = () => { reset(); navigate('/booking'); };
+
+  const calendarUrl = appointment
+    ? buildGoogleCalendarUrl(
+        `${appointment.serviceName} — ${niche.businessName}`,
+        appointment.date,
+        appointment.time,
+        appointment.duration,
+        `Profissional: ${appointment.professionalName}`
+      )
+    : null;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-background text-foreground">
@@ -31,7 +42,17 @@ export function BookingSuccessPage() {
             <Row label="Preço" value={formatCurrency(appointment.price)} />
           </div>
         )}
-        <Button variant="primary" className="w-full" onClick={handleBookAgain}>{texts.booking.sucesso.botaoNovo}</Button>
+        <div className="w-full flex flex-col gap-3">
+          {calendarUrl && (
+            <a href={calendarUrl} target="_blank" rel="noopener noreferrer" className="w-full">
+              <Button variant="secondary" className="w-full gap-2">
+                <CalendarPlus size={18} aria-hidden="true" />
+                {texts.booking.sucesso.botaoAgenda}
+              </Button>
+            </a>
+          )}
+          <Button variant="primary" className="w-full" onClick={handleBookAgain}>{texts.booking.sucesso.botaoNovo}</Button>
+        </div>
       </div>
     </div>
   );

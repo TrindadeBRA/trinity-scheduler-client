@@ -36,6 +36,7 @@
     "sucesso": {
       "titulo": "Agendamento confirmado!",
       "mensagem": "Seu agendamento foi realizado com sucesso.",
+      "botaoAgenda": "Adicionar à agenda",
       "botaoNovo": "Agendar novamente"
     }
   },

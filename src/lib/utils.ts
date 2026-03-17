@@ -47,3 +47,45 @@ export function formatDate(date: string, locale: string = "pt-BR"): string {
 export function formatTime(time: string): string {
   return time;
 }
+
+/**
+ * Builds a Google Calendar event URL from appointment data.
+ * Works on mobile (opens native app if installed) and desktop.
+ * @param title - Event title
+ * @param date - Date string in YYYY-MM-DD format
+ * @param time - Time string in HH:MM format
+ * @param durationMinutes - Duration in minutes
+ * @param description - Optional event description
+ */
+export function buildGoogleCalendarUrl(
+  title: string,
+  date: string,
+  time: string,
+  durationMinutes: number,
+  description?: string
+): string {
+  const [year, month, day] = date.split("-").map(Number);
+  const [hours, minutes] = time.split(":").map(Number);
+
+  const start = new Date(year, month - 1, day, hours, minutes);
+  const end = new Date(start.getTime() + durationMinutes * 60_000);
+
+  const fmt = (d: Date) =>
+    d.getFullYear().toString() +
+    String(d.getMonth() + 1).padStart(2, "0") +
+    String(d.getDate()).padStart(2, "0") +
+    "T" +
+    String(d.getHours()).padStart(2, "0") +
+    String(d.getMinutes()).padStart(2, "0") +
+    "00";
+
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: title,
+    dates: `${fmt(start)}/${fmt(end)}`,
+  });
+
+  if (description) params.set("details", description);
+
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
