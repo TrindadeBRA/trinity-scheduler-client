@@ -43,9 +43,10 @@ O Trinity Scheduler Core é o backend centralizado da aplicação Trinity Schedu
 3. IF o campo "phone" estiver ausente ou vazio na requisição, THEN THE Servidor_API SHALL retornar status 400 com mensagem de erro descritiva
 4. WHEN uma requisição GET /auth/validate?clientId={uuid} é recebida com um clientId válido (UUID existente no banco), THE Servidor_API SHALL retornar status 200 com os dados básicos do cliente (clientId, name)
 5. IF o clientId enviado via GET /auth/validate não existir no banco, THEN THE Servidor_API SHALL retornar status 404
-6. WHEN o frontend do cliente recebe um clientId via query parameter na URL (ex: ?clientId={uuid}), THE Frontend_Client SHALL salvar o clientId no localStorage e pular a tela de login por telefone
+6. WHEN o frontend do cliente recebe um parâmetro `ref` na URL contendo um payload base64 (formato: `base64(JSON.stringify({ shopId, clientId? }))`), THE Frontend_Client SHALL decodificar o payload, salvar o shopId (e clientId se presente) no localStorage, e usar o shopId em todas as requisições via header X-Shop-Id
 7. WHEN o frontend do cliente é carregado e já existe um clientId no localStorage, THE Frontend_Client SHALL validar o clientId via GET /auth/validate e, se válido, pular a tela de login por telefone
 8. IF o clientId armazenado no localStorage for inválido (retorno 404 do /auth/validate), THEN THE Frontend_Client SHALL remover o clientId do localStorage e exibir a tela de login por telefone
+9. THE Servidor_API SHALL exigir o header X-Shop-Id ou query param shopId em todas as requisições aos endpoints do cliente (/auth/*, /services, /addons, /professionals, /availability/*, /appointments), retornando status 400 se ausente
 
 ---
 
@@ -333,3 +334,17 @@ O Trinity Scheduler Core é o backend centralizado da aplicação Trinity Schedu
 1. THE Servidor_API SHALL filtrar todos os dados retornados nos endpoints /admin/* pelo shopId extraído do token JWT do usuário autenticado
 2. THE Servidor_API SHALL associar todos os registros criados via endpoints /admin/* ao shopId do usuário autenticado
 3. IF um usuário tentar acessar um recurso de outro estabelecimento, THEN THE Servidor_API SHALL retornar status 404 (sem revelar a existência do recurso)
+
+---
+
+### Requisito 24: Documentação Swagger/OpenAPI
+
+**User Story:** Como desenvolvedor consumindo a API, quero ter documentação interativa de todos os endpoints, para que eu possa entender e testar a API facilmente.
+
+#### Critérios de Aceitação
+
+1. THE Servidor_API SHALL expor documentação Swagger UI interativa no endpoint GET /api-docs
+2. THE Servidor_API SHALL documentar todos os endpoints (client e admin) com anotações swagger-jsdoc incluindo: summary, description, tags, parâmetros, requestBody (quando aplicável) e responses com schemas
+3. THE Servidor_API SHALL definir schemas reutilizáveis para todos os modelos de dados (Client, Service, Professional, Appointment, Unit, Shop, etc.) na seção components/schemas da spec OpenAPI
+4. THE Servidor_API SHALL documentar os mecanismos de autenticação (Bearer JWT para admin, X-Shop-Id para client) na seção securitySchemes
+5. THE Servidor_API SHALL indicar que valores monetários (price, totalSpent, revenue) são inteiros em centavos na descrição dos campos correspondentes
