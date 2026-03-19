@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle, CalendarPlus } from 'lucide-react';
-import { useBookingStore } from '../stores/bookingStore';
 import { Button } from '../components/ui/Button';
 import { formatCurrency, formatDate, buildGoogleCalendarUrl } from '../lib/utils';
 import texts from '../config/texts.json';
@@ -10,10 +9,7 @@ import type { Appointment } from '../lib/types';
 export function BookingSuccessPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const reset = useBookingStore((s) => s.reset);
   const appointment: Appointment | undefined = location.state?.appointment;
-
-  const handleBookAgain = () => { reset(); navigate('/booking'); };
 
   const calendarUrl = appointment
     ? buildGoogleCalendarUrl(
@@ -51,7 +47,7 @@ export function BookingSuccessPage() {
               </Button>
             </a>
           )}
-          <Button variant="primary" className="w-full" onClick={handleBookAgain}>{texts.booking.sucesso.botaoNovo}</Button>
+          <Button variant="primary" className="w-full" onClick={() => navigate('/appointments')}>{texts.booking.sucesso.botaoAgendamentos}</Button>
         </div>
       </div>
     </div>

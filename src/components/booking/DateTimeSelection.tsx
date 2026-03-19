@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '../../lib/utils';
 import { useBookingStore } from '../../stores/bookingStore';
 import { useAvailableSlots } from '../../hooks/useAvailableSlots';
@@ -33,6 +33,13 @@ export function DateTimeSelection() {
   const { selectedProfessional, setDateTime, nextStep } = useBookingStore();
   const { slots, disabledDates, isLoading } = useAvailableSlots(selectedProfessional?.id ?? null, selectedDate);
   const days = generateNext30Days();
+
+  useEffect(() => {
+    if (!selectedDate && days.length > 0) {
+      const firstAvailable = days.find((d) => !disabledDates.includes(d));
+      if (firstAvailable) setSelectedDate(firstAvailable);
+    }
+  }, [disabledDates]);
 
   const handleDateSelect = (date: string) => { setSelectedDate(date); setSelectedTime(null); };
   const handleTimeSelect = (time: string) => { setSelectedTime(time); };

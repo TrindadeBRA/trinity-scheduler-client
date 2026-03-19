@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route, Navigate, useSearchParams } from "react-router-dom";
+import { Routes, Route, Navigate, useSearchParams, useLocation } from "react-router-dom";
 import { useAuthStore } from "./stores/authStore";
 import { LoginPage } from "./pages/LoginPage";
 import { BookingPage } from "./pages/BookingPage";
@@ -19,6 +19,14 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
   return <>{children}</>;
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function AppRoutes() {
   const [searchParams] = useSearchParams();
   const loginFromUrl = useAuthStore((s) => s.loginFromUrl);
@@ -31,7 +39,9 @@ function AppRoutes() {
   }, [searchParams, loginFromUrl]);
 
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route
         path="/booking"
@@ -66,6 +76,7 @@ function AppRoutes() {
         }
       />
     </Routes>
+    </>
   );
 }
 
