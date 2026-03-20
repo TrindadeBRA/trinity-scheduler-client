@@ -76,7 +76,7 @@ export function BookingSuccessPage() {
                     <div key={addon.id} className="flex items-center justify-between text-sm gap-2">
                       <span className="truncate">{addon.name}</span>
                       <span className="text-muted-foreground text-xs shrink-0">
-                        {addon.duration}min · {formatCurrency(addon.price)}
+                        {addon.duration > 0 ? `+${addon.duration}min · ` : ''}{formatCurrency(addon.price)}
                       </span>
                     </div>
                   ))}
