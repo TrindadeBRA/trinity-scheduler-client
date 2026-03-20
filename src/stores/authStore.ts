@@ -5,6 +5,7 @@ const STORAGE_KEY = "trinity_client_id";
 
 interface AuthState {
   clientId: string | null;
+  clientName: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -12,11 +13,13 @@ interface AuthState {
   login: (phone: string) => Promise<void>;
   loginFromUrl: (clientId: string) => void;
   logout: () => void;
+  setClientName: (name: string) => void;
   init: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   clientId: null,
+  clientName: null,
   isAuthenticated: false,
   isLoading: false,
   error: null,
@@ -24,9 +27,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (phone: string) => {
     set({ isLoading: true, error: null });
     try {
-      const clientId = await authServiceLogin(phone);
+      const { clientId, name } = await authServiceLogin(phone);
       localStorage.setItem(STORAGE_KEY, clientId);
-      set({ clientId, isAuthenticated: true, isLoading: false });
+      set({ clientId, clientName: name, isAuthenticated: true, isLoading: false });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Erro ao fazer login";
       set({ isLoading: false, error: message });
@@ -40,7 +43,11 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: () => {
     localStorage.removeItem(STORAGE_KEY);
-    set({ clientId: null, isAuthenticated: false, error: null });
+    set({ clientId: null, clientName: null, isAuthenticated: false, error: null });
+  },
+
+  setClientName: (name: string) => {
+    set({ clientName: name });
   },
 
   init: async () => {
@@ -49,17 +56,17 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     set({ isLoading: true });
     try {
-      const isValid = await validateSession(clientId);
-      if (isValid) {
-        set({ clientId, isAuthenticated: true, isLoading: false });
+      const result = await validateSession(clientId);
+      if (result) {
+        set({ clientId, clientName: result.name, isAuthenticated: true, isLoading: false });
       } else {
         localStorage.removeItem(STORAGE_KEY);
-        set({ clientId: null, isAuthenticated: false, isLoading: false });
+        set({ clientId: null, clientName: null, isAuthenticated: false, isLoading: false });
         window.location.href = "/login";
       }
     } catch {
       localStorage.removeItem(STORAGE_KEY);
-      set({ clientId: null, isAuthenticated: false, isLoading: false });
+      set({ clientId: null, clientName: null, isAuthenticated: false, isLoading: false });
       window.location.href = "/login";
     }
   },
