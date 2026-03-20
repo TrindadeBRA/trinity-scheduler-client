@@ -8,10 +8,13 @@ interface TimeSlotGridProps {
   selectedTime: string | null;
   onSelect: (time: string) => void;
   isLoading: boolean;
+  isError?: boolean;
 }
 
-export function TimeSlotGrid({ slots, selectedTime, onSelect, isLoading }: TimeSlotGridProps) {
+export function TimeSlotGrid({ slots, selectedTime, onSelect, isLoading, isError }: TimeSlotGridProps) {
   if (isLoading) return <div className="grid grid-cols-3 gap-2"><SkeletonList count={9} itemClassName="h-10 rounded-lg" /></div>;
+
+  if (isError) return <p className="text-sm text-center py-4 text-destructive">{texts.geral.erro}</p>;
 
   const available = slots.filter((s) => s.available);
   if (available.length === 0) return <p className="text-sm text-center py-4 text-muted-foreground">{texts.booking.dataHorario.semHorarios}</p>;

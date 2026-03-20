@@ -32,7 +32,7 @@ export function DateTimeSelection() {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const { selectedProfessional, selectedService, selectedAddons, setDateTime, nextStep } = useBookingStore();
   const totalDuration = (selectedService?.duration ?? 30) + selectedAddons.reduce((sum, a) => sum + a.duration, 0);
-  const { slots, disabledDates, isLoading } = useAvailableSlots(selectedProfessional?.id ?? null, selectedDate, totalDuration);
+  const { slots, disabledDates, isLoading, isError } = useAvailableSlots(selectedProfessional?.id ?? null, selectedDate, totalDuration);
   const days = generateNext30Days();
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export function DateTimeSelection() {
           })}
         </div>
       </div>
-      {selectedDate && <TimeSlotGrid slots={slots} selectedTime={selectedTime} onSelect={handleTimeSelect} isLoading={isLoading} />}
+      {selectedDate && <TimeSlotGrid slots={slots} selectedTime={selectedTime} onSelect={handleTimeSelect} isLoading={isLoading} isError={isError} />}
       {selectedDate && selectedTime && (
         <Button variant="primary" onClick={handleContinue} className="mt-2">
           {texts.booking.dataHorario.botaoContinuar}
