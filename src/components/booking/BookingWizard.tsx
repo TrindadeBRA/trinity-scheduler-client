@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useBookingStore } from '../../stores/bookingStore';
 import { StepIndicator } from './StepIndicator';
 import { ServiceSelection } from './ServiceSelection';
@@ -12,6 +13,10 @@ export function BookingWizard() {
   const currentStep = useBookingStore((s) => s.currentStep);
   const stepLabels: string[] = texts.booking.etapas;
   const StepComponent = STEP_COMPONENTS[currentStep] ?? STEP_COMPONENTS[0];
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentStep]);
 
   return (
     <div className="flex flex-col w-full bg-background">

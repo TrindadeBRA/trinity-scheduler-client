@@ -8,7 +8,7 @@ import { formatCurrency } from "../../lib/utils";
 import { cn } from "../../lib/utils";
 import texts from "../../config/texts.json";
 import type { Service, AddonService } from "../../lib/types";
-import { Check, Plus } from "lucide-react";
+import { Check, Plus, Clock } from "lucide-react";
 
 export function ServiceSelection() {
   const { services, isLoading, isError } = useServices();
@@ -77,7 +77,11 @@ export function ServiceSelection() {
                       )}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-card-foreground">{addon.name}</p>
-                        <p className="text-xs text-muted-foreground">{addon.duration} min</p>
+                        {addon.duration > 0 && (
+                          <p className="text-xs text-muted-foreground flex items-center gap-1">
+                            <Clock className="h-3 w-3" /> +{addon.duration} min
+                          </p>
+                        )}
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         <span className="text-sm font-semibold text-primary">{formatCurrency(addon.price)}</span>
