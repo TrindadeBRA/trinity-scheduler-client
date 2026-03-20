@@ -52,6 +52,7 @@ export interface CreateAppointmentPayload {
   clientId: string;
   serviceId: string;
   professionalId: string | null; // null = no preference
+  addonIds?: string[];
   date: string;
   time: string;
 }

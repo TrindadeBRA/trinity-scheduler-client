@@ -4,12 +4,15 @@ import { Button } from '../components/ui/Button';
 import { formatCurrency, formatDate, buildGoogleCalendarUrl } from '../lib/utils';
 import texts from '../config/texts.json';
 import niche from '../config/niche.json';
-import type { Appointment } from '../lib/types';
+import type { Appointment, AddonService } from '../lib/types';
 
 export function BookingSuccessPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const appointment: Appointment | undefined = location.state?.appointment;
+  const addons: AddonService[] = location.state?.addons ?? [];
+
+  const total = appointment?.price ?? 0;
 
   const calendarUrl = appointment
     ? buildGoogleCalendarUrl(
@@ -32,10 +35,19 @@ export function BookingSuccessPage() {
         {appointment && (
           <div className="w-full rounded-lg p-4 flex flex-col gap-3 text-left bg-card border border-border">
             <Row label="Serviço" value={appointment.serviceName} />
+            {addons.length > 0 && (
+              <>
+                {addons.map((addon) => (
+                  <Row key={addon.id} label={`+ ${addon.name}`} value={formatCurrency(addon.price)} />
+                ))}
+              </>
+            )}
             <Row label="Profissional" value={appointment.professionalName} />
             <Row label="Data" value={formatDate(appointment.date)} />
             <Row label="Horário" value={appointment.time} />
-            <Row label="Preço" value={formatCurrency(appointment.price)} />
+            <div className="border-t border-border pt-2">
+              <Row label="Total" value={formatCurrency(total)} bold />
+            </div>
           </div>
         )}
         <div className="w-full flex flex-col gap-3">
@@ -54,11 +66,11 @@ export function BookingSuccessPage() {
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
   return (
     <div className="flex justify-between items-center gap-2">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium text-foreground">{value}</span>
+      <span className={`text-sm ${bold ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>{label}</span>
+      <span className={`text-sm ${bold ? 'font-bold text-primary' : 'font-medium text-foreground'}`}>{value}</span>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { phoneSchema, type PhoneFormData } from "../schemas/phoneSchema";
 import { useAuthStore } from "../stores/authStore";
 import { Input } from "../components/ui/Input";
@@ -18,7 +18,11 @@ function applyPhoneMask(value: string): string {
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuthStore();
+  const { login, isLoading, isAuthenticated } = useAuthStore();
+
+  if (isAuthenticated) {
+    return <Navigate to="/booking" replace />;
+  }
 
   const {
     register, handleSubmit, setValue,
