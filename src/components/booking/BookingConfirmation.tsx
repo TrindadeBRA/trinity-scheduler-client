@@ -80,36 +80,39 @@ export function BookingConfirmation() {
       )}
 
       {/* Data, horário e profissional */}
-      <div className="rounded-lg p-3 bg-card border border-border flex flex-col gap-3">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center shrink-0">
+      <div className="rounded-lg bg-card border border-border divide-y divide-border">
+        {/* Profissional */}
+        <div className="flex items-center gap-3 p-3">
+          <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
             {selectedProfessional?.avatar ? (
-              <img src={selectedProfessional.avatar} alt={selectedProfessional.name} className="h-9 w-9 rounded-full object-cover" />
+              <img src={selectedProfessional.avatar} alt={selectedProfessional.name} className="h-10 w-10 rounded-full object-cover" />
             ) : (
               <User className="h-4 w-4 text-muted-foreground" />
             )}
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Profissional</p>
-            <p className="text-sm font-medium">{selectedProfessional?.name ?? texts.booking.profissional.semPreferencia}</p>
+            <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Profissional</p>
+            <p className="text-sm font-semibold">{selectedProfessional?.name ?? texts.booking.profissional.semPreferencia}</p>
           </div>
         </div>
-        <div className="flex gap-4">
+
+        {/* Data e Horário */}
+        <div className="grid grid-cols-2 divide-x divide-border">
           {selectedDate && (
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center gap-2.5 p-3">
+              <Calendar className="h-4 w-4 text-primary shrink-0" />
               <div>
-                <p className="text-xs text-muted-foreground">Data</p>
-                <p className="text-sm font-medium">{formatDate(selectedDate)}</p>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Data</p>
+                <p className="text-sm font-semibold">{formatDate(selectedDate)}</p>
               </div>
             </div>
           )}
           {selectedTime && (
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center gap-2.5 p-3">
+              <Clock className="h-4 w-4 text-primary shrink-0" />
               <div>
-                <p className="text-xs text-muted-foreground">Horário</p>
-                <p className="text-sm font-medium">{selectedTime}</p>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Horário</p>
+                <p className="text-sm font-semibold">{selectedTime}</p>
               </div>
             </div>
           )}
