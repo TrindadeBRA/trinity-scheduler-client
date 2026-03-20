@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle, CalendarPlus } from 'lucide-react';
+import { CheckCircle, CalendarPlus, CalendarDays, Clock, Timer, User, Scissors, DollarSign, Plus } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { formatCurrency, formatDate, buildGoogleCalendarUrl } from '../lib/utils';
 import texts from '../config/texts.json';
@@ -33,21 +33,61 @@ export function BookingSuccessPage() {
           <p className="text-sm text-muted-foreground">{texts.booking.sucesso.mensagem}</p>
         </div>
         {appointment && (
-          <div className="w-full rounded-lg p-4 flex flex-col gap-3 text-left bg-card border border-border">
-            <Row label="Serviço" value={appointment.serviceName} />
-            {addons.length > 0 && (
-              <>
-                {addons.map((addon) => (
-                  <Row key={addon.id} label={`+ ${addon.name}`} value={formatCurrency(addon.price)} />
-                ))}
-              </>
-            )}
-            <Row label="Profissional" value={appointment.professionalName} />
-            <Row label="Data" value={formatDate(appointment.date)} />
-            <Row label="Horário" value={appointment.time} />
-            <div className="border-t border-border pt-2">
-              <Row label="Total" value={formatCurrency(total)} bold />
+          <div className="w-full flex flex-col gap-3 text-left">
+            {/* Data e horário */}
+            <div className="rounded-lg border bg-muted/30 p-4 flex items-center gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <CalendarDays className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-sm font-medium capitalize">{formatDate(appointment.date)}</span>
+                <div className="flex items-center gap-3 text-muted-foreground text-xs mt-0.5">
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3 w-3" aria-hidden="true" />
+                    {appointment.time}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Timer className="h-3 w-3" aria-hidden="true" />
+                    {appointment.duration} min
+                  </span>
+                </div>
+              </div>
             </div>
+
+            {/* Profissional */}
+            <div className="grid grid-cols-2 gap-3">
+              <InfoCard icon={<User className="h-4 w-4" aria-hidden="true" />} label="Profissional">
+                <span className="text-sm font-medium break-words">{appointment.professionalName}</span>
+              </InfoCard>
+              <InfoCard icon={<Scissors className="h-4 w-4" aria-hidden="true" />} label="Serviço">
+                <span className="text-sm font-medium break-words">{appointment.serviceName}</span>
+              </InfoCard>
+            </div>
+
+            {/* Adicionais */}
+            {addons.length > 0 && (
+              <div className="rounded-lg border p-3 space-y-2">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span className="text-xs font-medium uppercase tracking-wide">Adicionais</span>
+                </div>
+                <div className="space-y-1.5">
+                  {addons.map((addon) => (
+                    <div key={addon.id} className="flex items-center justify-between text-sm gap-2">
+                      <span className="truncate">{addon.name}</span>
+                      <span className="text-muted-foreground text-xs shrink-0">
+                        {addon.duration}min · {formatCurrency(addon.price)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Valor total */}
+            <InfoCard icon={<DollarSign className="h-4 w-4" aria-hidden="true" />} label="Valor total">
+              <span className="text-sm font-semibold text-primary">{formatCurrency(total)}</span>
+            </InfoCard>
           </div>
         )}
         <div className="w-full flex flex-col gap-3">
@@ -66,11 +106,14 @@ export function BookingSuccessPage() {
   );
 }
 
-function Row({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
+function InfoCard({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
   return (
-    <div className="flex justify-between items-center gap-2">
-      <span className={`text-sm ${bold ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>{label}</span>
-      <span className={`text-sm ${bold ? 'font-bold text-primary' : 'font-medium text-foreground'}`}>{value}</span>
+    <div className="rounded-lg border bg-card p-3 space-y-1 min-w-0">
+      <div className="flex items-center gap-1.5 text-muted-foreground">
+        {icon}
+        <span className="text-xs">{label}</span>
+      </div>
+      <div className="min-w-0">{children}</div>
     </div>
   );
 }
