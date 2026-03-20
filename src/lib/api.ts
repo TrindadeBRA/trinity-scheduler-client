@@ -17,18 +17,40 @@ const API_URL = (() => {
 })()
 
 const SHOP_STORAGE_KEY = "trinity_shop_id"
+const UNIT_STORAGE_KEY = "trinity_unit_id"
 
-export function decodeShopId(): string | null {
+function decodeRef(): { shopId: string; unitId: string | null } | null {
   const params = new URLSearchParams(window.location.search)
   const ref = params.get("ref")
-  if (!ref) return localStorage.getItem(SHOP_STORAGE_KEY)
+  if (!ref) return null
   try {
     const decoded = atob(ref)
-    localStorage.setItem(SHOP_STORAGE_KEY, decoded)
-    return decoded
+    const [shopId, unitId] = decoded.split(":")
+    return { shopId, unitId: unitId || null }
   } catch {
     return null
   }
+}
+
+export function decodeShopId(): string | null {
+  const result = decodeRef()
+  if (result) {
+    localStorage.setItem(SHOP_STORAGE_KEY, result.shopId)
+    if (result.unitId) {
+      localStorage.setItem(UNIT_STORAGE_KEY, result.unitId)
+    }
+    return result.shopId
+  }
+  return localStorage.getItem(SHOP_STORAGE_KEY)
+}
+
+export function getUnitId(): string | null {
+  const result = decodeRef()
+  if (result?.unitId) {
+    localStorage.setItem(UNIT_STORAGE_KEY, result.unitId)
+    return result.unitId
+  }
+  return localStorage.getItem(UNIT_STORAGE_KEY)
 }
 
 export async function clientApi(

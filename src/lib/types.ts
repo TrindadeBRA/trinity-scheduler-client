@@ -55,6 +55,7 @@ export interface CreateAppointmentPayload {
   addonIds?: string[];
   date: string;
   time: string;
+  unitId?: string | null;
 }
 
 export interface NicheConfig {

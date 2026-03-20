@@ -1,5 +1,5 @@
 import type { Appointment, CreateAppointmentPayload } from "../lib/types";
-import { clientApi } from "../lib/api";
+import { clientApi, getUnitId } from "../lib/api";
 import { centsToReais } from "../lib/price";
 
 export async function getAppointments(clientId: string): Promise<Appointment[]> {
@@ -11,9 +11,10 @@ export async function getAppointments(clientId: string): Promise<Appointment[]> 
 export async function createAppointment(
   payload: CreateAppointmentPayload
 ): Promise<Appointment> {
+  const unitId = payload.unitId || getUnitId();
   const response = await clientApi("/appointments", {
     method: "POST",
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...payload, unitId }),
   });
   const data: Appointment = await response.json();
   return { ...data, price: centsToReais(data.price) };
