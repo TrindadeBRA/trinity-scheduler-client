@@ -30,16 +30,17 @@ function formatDayLabel(dateStr: string) {
 export function DateTimeSelection() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const { selectedProfessional, setDateTime, nextStep } = useBookingStore();
-  const { slots, disabledDates, isLoading } = useAvailableSlots(selectedProfessional?.id ?? null, selectedDate);
+  const { selectedProfessional, selectedService, selectedAddons, setDateTime, nextStep } = useBookingStore();
+  const totalDuration = (selectedService?.duration ?? 30) + selectedAddons.reduce((sum, a) => sum + a.duration, 0);
+  const { slots, disabledDates, isLoading } = useAvailableSlots(selectedProfessional?.id ?? null, selectedDate, totalDuration);
   const days = generateNext30Days();
 
   useEffect(() => {
     if (!selectedDate && days.length > 0) {
-      const firstAvailable = days.find((d) => !disabledDates.includes(d));
-      if (firstAvailable) setSelectedDate(firstAvailable);
+      const firstAvailable = days.find((d) => !disabledDates.includes(d)) ?? days[0];
+      setSelectedDate(firstAvailable);
     }
-  }, [disabledDates]);
+  }, [disabledDates, days.length]);
 
   const handleDateSelect = (date: string) => { setSelectedDate(date); setSelectedTime(null); };
   const handleTimeSelect = (time: string) => { setSelectedTime(time); };

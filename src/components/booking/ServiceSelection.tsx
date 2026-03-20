@@ -1,9 +1,9 @@
 import { useServices } from "../../hooks/useServices";
+import { useAddons } from "../../hooks/useAddons";
 import { useBookingStore } from "../../stores/bookingStore";
 import { SkeletonList } from "../ui/SkeletonList";
 import { ServiceCard } from "./ServiceCard";
 import { Button } from "../ui/Button";
-import { mockAddons } from "../../mocks/addons";
 import { formatCurrency } from "../../lib/utils";
 import { cn } from "../../lib/utils";
 import texts from "../../config/texts.json";
@@ -12,6 +12,7 @@ import { Check, Plus } from "lucide-react";
 
 export function ServiceSelection() {
   const { services, isLoading, isError } = useServices();
+  const { addons, isLoading: addonsLoading } = useAddons();
   const selectedService = useBookingStore((s) => s.selectedService);
   const selectedAddons = useBookingStore((s) => s.selectedAddons);
   const setService = useBookingStore((s) => s.setService);
@@ -56,7 +57,8 @@ export function ServiceSelection() {
                 <p className="text-xs mt-0.5 text-muted-foreground">{texts.booking.adicionais.subtitulo}</p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {mockAddons.map((addon) => {
+                {addonsLoading && <SkeletonList count={3} itemClassName="h-14 rounded-lg" />}
+                {addons.map((addon) => {
                   const selected = isAddonSelected(addon);
                   return (
                     <button

@@ -16,12 +16,16 @@ const API_URL = (() => {
   return url
 })()
 
+const SHOP_STORAGE_KEY = "trinity_shop_id"
+
 export function decodeShopId(): string | null {
   const params = new URLSearchParams(window.location.search)
   const ref = params.get("ref")
-  if (!ref) return null
+  if (!ref) return localStorage.getItem(SHOP_STORAGE_KEY)
   try {
-    return atob(ref)
+    const decoded = atob(ref)
+    localStorage.setItem(SHOP_STORAGE_KEY, decoded)
+    return decoded
   } catch {
     return null
   }
