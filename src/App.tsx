@@ -1,13 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useSearchParams, useLocation } from "react-router-dom";
 import { useAuthStore } from "./stores/authStore";
 import { decodeShopId } from "./lib/api";
+import { extractSlugFromSubdomain, resolveSlug } from "./services/slugResolver";
+import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { BookingPage } from "./pages/BookingPage";
 import { BookingSuccessPage } from "./pages/BookingSuccessPage";
 import { AppointmentsPage } from "./pages/AppointmentsPage";
 import { AppointmentDetailPage } from "./pages/AppointmentDetailPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { SlugNotFoundError } from "./components/SlugNotFoundError";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -90,5 +93,63 @@ function AppRoutes() {
 }
 
 export default function App() {
+  const [isResolving, setIsResolving] = useState(true);
+  const [resolutionError, setResolutionError] = useState<string | null>(null);
+  const [hasSlug, setHasSlug] = useState(false);
+
+  useEffect(() => {
+    async function initializeApp() {
+      try {
+        // Tenta extrair slug do subdomínio
+        const slug = extractSlugFromSubdomain();
+
+        if (slug) {
+          // Resolve slug para obter shopId e unitId
+          const result = await resolveSlug(slug);
+
+          // Armazena em localStorage
+          localStorage.setItem('trinity_shop_id', result.shopId);
+          localStorage.setItem('trinity_unit_id', result.unitId);
+
+          console.log(`[Slug] Resolvido: ${slug} -> Shop: ${result.shopName}, Unit: ${result.unitName}`);
+          setHasSlug(true);
+        } else {
+          // Sem slug, exibe home page
+          setHasSlug(false);
+        }
+
+        setIsResolving(false);
+      } catch (error) {
+        console.error('[Slug] Erro ao resolver:', error);
+        setResolutionError(error instanceof Error ? error.message : 'Erro ao resolver slug');
+        setIsResolving(false);
+      }
+    }
+
+    initializeApp();
+  }, []);
+
+  // Exibe loading durante resolução
+  if (isResolving) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-muted-foreground">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Exibe erro se resolução falhar
+  if (resolutionError) {
+    return <SlugNotFoundError />;
+  }
+
+  // Se não tem slug, exibe home page
+  if (!hasSlug) {
+    return <HomePage />;
+  }
+
   return <AppRoutes />;
 }
