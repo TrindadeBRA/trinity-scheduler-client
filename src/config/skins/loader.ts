@@ -1,6 +1,14 @@
 import { ThemeConfigSchemaZ, type ThemeConfig } from './schema';
+import barbeariaConfig from './barbearia.json';
+import salaoConfig from './salao-beleza.json';
 
 export type { ThemeConfig };
+
+// Mapeamento estático de skins
+const SKIN_MAP: Record<string, ThemeConfig> = {
+  'barbearia': barbeariaConfig as ThemeConfig,
+  'salao-beleza': salaoConfig as ThemeConfig,
+};
 
 const CACHE_KEY = 'trinity_theme_config';
 const CACHE_TIMESTAMP_KEY = 'trinity_theme_timestamp';
@@ -57,16 +65,18 @@ function saveToCache(config: ThemeConfig): void {
 }
 
 /**
- * Carrega arquivo de skin dinamicamente
+ * Carrega arquivo de skin do mapeamento estático
  * @param nicheId - Identificador do nicho (ex: 'barbearia', 'salao-beleza')
  * @returns Promise com ThemeConfig validado
  * @throws SkinLoadError se o arquivo não existir ou for inválido
  */
 async function loadSkinFile(nicheId: string): Promise<ThemeConfig> {
   try {
-    const module = await import(`./${nicheId}.json`);
-    const config = ThemeConfigSchemaZ.parse(module.default);
-    return config;
+    const config = SKIN_MAP[nicheId];
+    if (!config) {
+      throw new Error(`Skin "${nicheId}" não encontrada`);
+    }
+    return ThemeConfigSchemaZ.parse(config);
   } catch (error) {
     throw new SkinLoadError(
       `Falha ao carregar skin "${nicheId}"`,
