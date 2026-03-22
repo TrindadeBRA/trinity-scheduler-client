@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "nicheId": "salao-beleza",
+    "displayName": "Salão de Beleza",
+    "description": "Tema feminino e elegante para salões de beleza e estética"
+  },
+  "colors": {
+    "primary": "#ec4899",
+    "secondary": "#fdf2f8",
+    "accent": "#db2777",
+    "background": "#ffffff",
+    "text": "#1f2937",
+    "muted": "#fdf2f8",
+    "border": "#f9a8d4",
+    "input": "#fdf2f8"
+  },
+  "texts": {
+    "login": {
+      "titulo": "Bem-vinda",
+      "subtitulo": "Informe seu telefone para continuar",
+      "placeholder": "(11) 99999-9999",
+      "botaoEntrar": "Entrar"
+    },
+    "booking": {
+      "etapas": ["Tratamento", "Profissional", "Data e Horário", "Confirmação"],
+      "servico": {
+        "titulo": "Escolha o tratamento",
+        "subtitulo": "Selecione o tratamento que deseja agendar"
+      },
+      "adicionais": {
+        "titulo": "Tratamentos adicionais",
+        "subtitulo": "Complemente seu atendimento (opcional)",
+        "botaoContinuar": "Continuar"
+      },
+      "profissional": {
+        "titulo": "Escolha a profissional",
+        "subtitulo": "Selecione com quem deseja ser atendida",
+        "semPreferencia": "Sem preferência",
+        "botaoContinuar": "Continuar"
+      },
+      "dataHorario": {
+        "titulo": "Escolha a data e horário",
+        "subtitulo": "Selecione quando deseja ser atendida",
+        "semHorarios": "Nenhum horário disponível para esta data",
+        "botaoContinuar": "Continuar"
+      },
+      "confirmacao": {
+        "titulo": "Confirme seu agendamento",
+        "botaoConfirmar": "Confirmar agendamento",
+        "botaoVoltar": "Voltar e editar"
+      },
+      "sucesso": {
+        "titulo": "Agendamento confirmado!",
+        "mensagem": "Seu agendamento foi realizado com sucesso.",
+        "botaoAgenda": "Adicionar à agenda",
+        "botaoNovo": "Agendar novamente",
+        "botaoAgendamentos": "Meus agendamentos"
+      }
+    },
+    "agendamentos": {
+      "titulo": "Meus agendamentos",
+      "proximos": "Próximos",
+      "anteriores": "Histórico",
+      "cancelar": "Cancelar agendamento",
+      "confirmarCancelamento": "Tem certeza que deseja cancelar este agendamento?",
+      "justificativaPlaceholder": "Informe o motivo do cancelamento...",
+      "justificativaObrigatoria": "A justificativa é obrigatória para cancelar.",
+      "canceladoComSucesso": "Agendamento cancelado.",
+      "vazio": "Nenhum agendamento encontrado",
+      "vazioProximos": "Você não tem agendamentos futuros",
+      "vazioHistorico": "Nenhum atendimento no histórico",
+      "hoje": "Hoje",
+      "motivoCancelamento": "Motivo do cancelamento"
+    },
+    "validacao": {
+      "apenasNumeros": "O telefone deve conter apenas números",
+      "telefoneMinimo": "O telefone deve ter no mínimo 10 dígitos",
+      "telefoneMaximo": "O telefone deve ter no máximo 15 dígitos",
+      "telefoneInvalido": "Informe um telefone válido. Ex: (11) 99999-9999"
+    },
+    "geral": {
+      "carregando": "Carregando...",
+      "erro": "Ocorreu um erro. Tente novamente.",
+      "tentarNovamente": "Tentar novamente",
+      "sair": "Sair"
+    }
+  }
+}

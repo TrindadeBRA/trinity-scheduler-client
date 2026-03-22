@@ -4,6 +4,7 @@ import { useAuthStore } from "./stores/authStore";
 import { decodeShopId } from "./lib/api";
 import { extractSlugFromSubdomain, resolveSlug } from "./services/slugResolver";
 import { useMetaTags } from "./hooks/useMetaTags";
+import { SkinProvider } from "./contexts/SkinContext";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { BookingPage } from "./pages/BookingPage";
@@ -38,9 +39,35 @@ function AppRoutes() {
   const loginFromUrl = useAuthStore((s) => s.loginFromUrl);
 
   useEffect(() => {
+    // Tenta fazer login automático via clientId (formato legado)
     const clientId = searchParams.get("clientId");
     if (clientId) {
       loginFromUrl(clientId);
+      return;
+    }
+    
+    // Tenta decodificar userId do ref parameter (novo formato)
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+    if (ref) {
+      // Verifica se já temos shopId (slug resolvido)
+      const hasShopId = localStorage.getItem('trinity_shop_id') !== null;
+      
+      if (hasShopId) {
+        // Se temos shopId, o ref deve ser userId
+        (async () => {
+          try {
+            const { decodeBase62 } = await import('./lib/encoding');
+            const userId = decodeBase62(ref);
+            localStorage.setItem('trinity_user_id', userId);
+            
+            // Faz login automático com o userId
+            loginFromUrl(userId);
+          } catch (error) {
+            console.error('[App] Erro ao decodificar ref:', error);
+          }
+        })();
+      }
     }
   }, [searchParams, loginFromUrl]);
 
@@ -167,5 +194,9 @@ export default function App() {
     return <HomePage />;
   }
 
-  return <AppRoutes />;
+  return (
+    <SkinProvider>
+      <AppRoutes />
+    </SkinProvider>
+  );
 }

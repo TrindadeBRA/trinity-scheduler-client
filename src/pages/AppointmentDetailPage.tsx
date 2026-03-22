@@ -40,7 +40,7 @@ export function AppointmentDetailPage() {
     }
     if (!appointment) return;
     cancelMutate(appointment.id, {
-      onSuccess: () => navigate("/appointments"),
+      onSuccess: () => navigate("/meus-agendamentos"),
     });
   };
 
@@ -50,7 +50,7 @@ export function AppointmentDetailPage() {
   return (
     <MobileLayout>
       <button
-        onClick={() => navigate("/appointments")}
+        onClick={() => navigate("/meus-agendamentos")}
         className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
       >
         <ArrowLeft className="h-4 w-4" /> Agendamentos

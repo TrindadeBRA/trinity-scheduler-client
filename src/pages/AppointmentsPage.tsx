@@ -38,7 +38,7 @@ function formatWeekday(dateStr: string) {
 
 function AppointmentCard({ appointment, clickable }: { appointment: Appointment; clickable: boolean }) {
   const navigate = useNavigate();
-  const handleClick = () => clickable && navigate(`/appointments/${appointment.id}`);
+  const handleClick = () => clickable && navigate(`/meus-agendamentos/${appointment.id}`);
   const config = STATUS_CONFIG[appointment.status];
   const StatusIcon = config.icon;
 

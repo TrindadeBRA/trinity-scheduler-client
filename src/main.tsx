@@ -7,12 +7,22 @@ import App from "./App";
 
 const queryClient = new QueryClient();
 
+const isDev = import.meta.env.DEV;
+
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  isDev ? (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </QueryClientProvider>
-  </StrictMode>
+  ) : (
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </StrictMode>
+  )
 );

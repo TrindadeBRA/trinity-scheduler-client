@@ -17,12 +17,12 @@ export function ProfessionalCard({
   return (
     <Card variant="selectable" selected={selected} onClick={onSelect}>
       <div className="flex items-center gap-3">
-        {isNoPreference ? (
+        {isNoPreference || !professional?.avatar ? (
           <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 bg-muted">
             <UserCircle size={28} className="text-muted-foreground" />
           </div>
         ) : (
-          <img src={professional?.avatar} alt={professional?.name} className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
+          <img src={professional.avatar} alt={professional.name} className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
         )}
         <div className="flex flex-col gap-1 min-w-0">
           <span className="font-medium text-sm text-foreground">

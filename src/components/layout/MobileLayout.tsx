@@ -18,9 +18,9 @@ export function MobileLayout({ children }: MobileLayoutProps) {
       </main>
       <nav className="sticky bottom-0 border-t border-border bg-card/95 backdrop-blur-sm">
         <div className="flex items-center">
-          <NavLink to="/booking" active={pathname.startsWith("/booking")} icon={<CalendarPlus className="h-5 w-5" />} label="Agendar" />
+          <NavLink to="/agendamento" active={pathname.startsWith("/agendamento")} icon={<CalendarPlus className="h-5 w-5" />} label="Agendar" />
           <div className="w-px h-8 bg-border" />
-          <NavLink to="/appointments" active={pathname.startsWith("/appointments")} icon={<CalendarCheck className="h-5 w-5" />} label="Agendamentos" />
+          <NavLink to="/meus-agendamentos" active={pathname.startsWith("/meus-agendamentos")} icon={<CalendarCheck className="h-5 w-5" />} label="Agendamentos" />
         </div>
       </nav>
     </div>
