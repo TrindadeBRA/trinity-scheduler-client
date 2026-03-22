@@ -39,6 +39,18 @@ export const useAuthStore = create<AuthState>((set) => ({
   loginFromUrl: (clientId: string) => {
     localStorage.setItem(STORAGE_KEY, clientId);
     set({ clientId, isAuthenticated: true });
+    
+    // Valida a sessão imediatamente para buscar o nome do cliente
+    (async () => {
+      try {
+        const result = await validateSession(clientId);
+        if (result) {
+          set({ clientName: result.name });
+        }
+      } catch (error) {
+        console.error('[Auth] Erro ao validar sessão:', error);
+      }
+    })();
   },
 
   logout: () => {

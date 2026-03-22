@@ -37,19 +37,29 @@ function ScrollToTop() {
 function AppRoutes() {
   const [searchParams] = useSearchParams();
   const loginFromUrl = useAuthStore((s) => s.loginFromUrl);
+  const logout = useAuthStore((s) => s.logout);
+  const currentClientId = useAuthStore((s) => s.clientId);
+
+  // Extrai os parâmetros fora do useEffect para usá-los como dependências
+  const clientIdParam = searchParams.get("clientId");
+  const refParam = searchParams.get("ref");
 
   useEffect(() => {
     // Tenta fazer login automático via clientId (formato legado)
-    const clientId = searchParams.get("clientId");
-    if (clientId) {
-      loginFromUrl(clientId);
+    if (clientIdParam) {
+      // Se o clientId é diferente do atual, faz logout e recarrega a página
+      if (currentClientId && currentClientId !== clientIdParam) {
+        console.log('[Auth] Trocando de perfil:', currentClientId, '->', clientIdParam);
+        logout();
+        window.location.reload();
+        return;
+      }
+      loginFromUrl(clientIdParam);
       return;
     }
     
     // Tenta decodificar userId do ref parameter (novo formato)
-    const params = new URLSearchParams(window.location.search);
-    const ref = params.get("ref");
-    if (ref) {
+    if (refParam) {
       // Verifica se já temos shopId (slug resolvido)
       const hasShopId = localStorage.getItem('trinity_shop_id') !== null;
       
@@ -58,7 +68,17 @@ function AppRoutes() {
         (async () => {
           try {
             const { decodeBase62 } = await import('./lib/encoding');
-            const userId = decodeBase62(ref);
+            const userId = decodeBase62(refParam);
+            
+            // Se o userId é diferente do atual, faz logout e recarrega a página
+            if (currentClientId && currentClientId !== userId) {
+              console.log('[Auth] Trocando de perfil via ref:', currentClientId, '->', userId);
+              logout();
+              localStorage.setItem('trinity_user_id', userId);
+              window.location.reload();
+              return;
+            }
+            
             localStorage.setItem('trinity_user_id', userId);
             
             // Faz login automático com o userId
@@ -69,7 +89,7 @@ function AppRoutes() {
         })();
       }
     }
-  }, [searchParams, loginFromUrl]);
+  }, [clientIdParam, refParam, loginFromUrl, logout, currentClientId]);
 
   const shopId = decodeShopId();
 
