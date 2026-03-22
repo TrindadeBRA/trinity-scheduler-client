@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useSearchParams, useLocation } from "react-rou
 import { useAuthStore } from "./stores/authStore";
 import { decodeShopId } from "./lib/api";
 import { extractSlugFromSubdomain, resolveSlug } from "./services/slugResolver";
+import { useMetaTags } from "./hooks/useMetaTags";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { BookingPage } from "./pages/BookingPage";
@@ -96,6 +97,7 @@ export default function App() {
   const [isResolving, setIsResolving] = useState(true);
   const [resolutionError, setResolutionError] = useState<string | null>(null);
   const [hasSlug, setHasSlug] = useState(false);
+  const [unitInfo, setUnitInfo] = useState<{ shopName: string; unitName: string } | null>(null);
 
   useEffect(() => {
     async function initializeApp() {
@@ -112,6 +114,9 @@ export default function App() {
           localStorage.setItem('trinity_unit_id', result.unitId);
 
           console.log(`[Slug] Resolvido: ${slug} -> Shop: ${result.shopName}, Unit: ${result.unitName}`);
+          
+          // Armazena info para meta tags
+          setUnitInfo({ shopName: result.shopName, unitName: result.unitName });
           setHasSlug(true);
         } else {
           // Sem slug, exibe home page
@@ -128,6 +133,17 @@ export default function App() {
 
     initializeApp();
   }, []);
+
+  // Atualiza meta tags dinamicamente baseado na unidade
+  useMetaTags({
+    title: unitInfo 
+      ? `${unitInfo.unitName} | Agende seu Horário`
+      : 'Kronuz - Agende seu Horário',
+    description: unitInfo
+      ? `Agende seu horário em ${unitInfo.unitName} de forma rápida e fácil`
+      : 'Agende seu horário de forma rápida e fácil',
+    url: window.location.href,
+  });
 
   // Exibe loading durante resolução
   if (isResolving) {
