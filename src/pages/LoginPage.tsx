@@ -32,11 +32,11 @@ export function LoginPage() {
 
   const onSubmit = async (data: PhoneFormData) => {
     await login(data.phone);
-    navigate("/booking");
+    navigate("/agendamento");
   };
 
   if (isAuthenticated) {
-    return <Navigate to="/booking" replace />;
+    return <Navigate to="/agendamento" replace />;
   }
 
   return (

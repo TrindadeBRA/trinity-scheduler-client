@@ -26,7 +26,7 @@ export function BookingConfirmation() {
     if (!clientId || !selectedService || !selectedDate || !selectedTime) return;
     mutate(
       { clientId, serviceId: selectedService.id, professionalId: selectedProfessional?.id ?? null, addonIds: selectedAddons.map((a) => a.id), date: selectedDate, time: selectedTime },
-      { onSuccess: (appointment) => navigate('/booking/success', { state: { appointment, addons: selectedAddons } }) }
+      { onSuccess: (appointment) => navigate('/agendamento/sucesso', { state: { appointment, addons: selectedAddons } }) }
     );
   };
 

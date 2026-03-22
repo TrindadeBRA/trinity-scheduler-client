@@ -56,7 +56,7 @@ function AppRoutes() {
       <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route
-        path="/booking"
+        path="/agendamento"
         element={
           <ProtectedRoute>
             <BookingPage />
@@ -64,7 +64,7 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/booking/success"
+        path="/agendamento/sucesso"
         element={
           <ProtectedRoute>
             <BookingSuccessPage />
@@ -72,7 +72,7 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/appointments"
+        path="/meus-agendamentos"
         element={
           <ProtectedRoute>
             <AppointmentsPage />
@@ -80,7 +80,7 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/appointments/:id"
+        path="/meus-agendamentos/:id"
         element={
           <ProtectedRoute>
             <AppointmentDetailPage />

@@ -99,7 +99,7 @@ export function BookingSuccessPage() {
               </Button>
             </a>
           )}
-          <Button variant="primary" className="w-full" onClick={() => navigate('/appointments')}>{texts.booking.sucesso.botaoAgendamentos}</Button>
+          <Button variant="primary" className="w-full" onClick={() => navigate('/meus-agendamentos')}>{texts.booking.sucesso.botaoAgendamentos}</Button>
         </div>
       </div>
     </div>
