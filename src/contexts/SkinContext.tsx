@@ -65,6 +65,11 @@ export function SkinProvider({ children }: SkinProviderProps) {
         
         const data = await response.json();
         const nicheId = data.niche || 'barbearia';
+
+        // Cache logo URL for other components
+        if (data.logoUrl) {
+          localStorage.setItem('trinity_logo_url', data.logoUrl);
+        }
         
         // Verifica se o cache é do niche correto
         const cachedConfig = localStorage.getItem('trinity_theme_config');

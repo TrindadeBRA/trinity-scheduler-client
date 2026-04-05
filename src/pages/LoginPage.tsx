@@ -39,9 +39,14 @@ export function LoginPage() {
     return <Navigate to="/agendamento" replace />;
   }
 
+  const logoUrl = localStorage.getItem('trinity_logo_url');
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-[400px] flex flex-col gap-6">
+        {logoUrl && (
+          <img src={logoUrl} alt="Logo" className="mx-auto h-24 w-24 rounded-full object-cover" />
+        )}
         <div className="text-center">
           <h1 className="text-3xl font-display font-bold text-foreground mb-2">{texts.login.titulo}</h1>
           <p className="text-sm text-muted-foreground">{texts.login.subtitulo}</p>
