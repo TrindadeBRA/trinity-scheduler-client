@@ -4,11 +4,26 @@ import salaoConfig from './salao-beleza.json';
 
 export type { ThemeConfig };
 
-// Mapeamento estático de skins
+// Mapeamento de nicho → skin (vários nichos → 2 skins)
+const NICHE_TO_SKIN: Record<string, 'barbearia' | 'salao-beleza'> = {
+  'barbearia': 'barbearia',
+  'salao-beleza': 'salao-beleza',
+  'esmalteria': 'salao-beleza',
+  'clinica-estetica': 'salao-beleza',
+  'manicure': 'salao-beleza',
+  'pedicure': 'salao-beleza',
+  'cabeleireiro': 'salao-beleza',
+};
+
+// Skin configs (apenas 2 skins físicas)
 const SKIN_MAP: Record<string, ThemeConfig> = {
   'barbearia': barbeariaConfig as ThemeConfig,
   'salao-beleza': salaoConfig as ThemeConfig,
 };
+
+function resolveSkin(nicheId: string): 'barbearia' | 'salao-beleza' {
+  return NICHE_TO_SKIN[nicheId] ?? 'barbearia';
+}
 
 const CACHE_KEY = 'trinity_theme_config';
 const CACHE_TIMESTAMP_KEY = 'trinity_theme_timestamp';
@@ -99,25 +114,27 @@ async function loadSkinFile(nicheId: string): Promise<ThemeConfig> {
  * ```
  */
 export async function loadSkin(nicheId: string): Promise<ThemeConfig> {
+  const skinId = resolveSkin(nicheId);
+
   // Tenta cache primeiro
   const cached = loadFromCache();
-  if (cached && cached.metadata.nicheId === nicheId) {
+  if (cached && cached.metadata.nicheId === skinId) {
     return cached;
   }
-  
-  // Tenta carregar skin solicitada
+
+  // Tenta carregar skin
   try {
-    const config = await loadSkinFile(nicheId);
+    const config = await loadSkinFile(skinId);
     saveToCache(config);
     return config;
   } catch (error) {
     // Fallback para skin padrão
-    if (nicheId !== DEFAULT_NICHE) {
+    if (skinId !== DEFAULT_NICHE) {
       const fallback = await loadSkinFile(DEFAULT_NICHE);
       saveToCache(fallback);
       return fallback;
     }
-    
+
     throw error;
   }
 }
