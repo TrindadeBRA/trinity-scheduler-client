@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useSearchParams, useLocation } from "react-router-dom";
 import { useAuthStore } from "./stores/authStore";
 import { decodeShopId } from "./lib/api";
-import { extractSlugFromSubdomain, resolveSlug } from "./services/slugResolver";
+import { extractSlugFromSubdomain, resolveSlug, SlugNotFoundError } from "./services/slugResolver";
 import { saveUnitInfo, hasCachedUnitInfo, SHOP_ID_KEY } from "./hooks/useShop";import { useMetaTags } from "./hooks/useMetaTags";
 import { SkinProvider } from "./contexts/SkinContext";
 import { HomePage } from "./pages/HomePage";
@@ -170,7 +170,13 @@ export default function App() {
 
         setIsResolving(false);
       } catch (error) {
-        // Se falhou mas temos dados em cache, continua funcionando
+        // 404 = slug não existe — nunca usa cache, mostra 404
+        if (error instanceof SlugNotFoundError) {
+          setResolutionError('Unidade não encontrada');
+          setIsResolving(false);
+          return;
+        }
+        // Erro de rede — se temos cache, continua funcionando offline
         if (hasCachedUnitInfo()) {
           setHasSlug(true);
           setIsResolving(false);
