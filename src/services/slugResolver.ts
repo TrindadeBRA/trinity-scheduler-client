@@ -51,17 +51,24 @@ export function extractSlugFromSubdomain(): string | null {
  * 
  * Requirements: 7.1, 7.5, 7.6
  */
+export class SlugNotFoundError extends Error {
+  constructor() {
+    super('Unidade não encontrada');
+    this.name = 'SlugNotFoundError';
+  }
+}
+
 export async function resolveSlug(slug: string): Promise<SlugResolutionResult> {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-  
+
   const response = await fetch(`${API_URL}/client/units/resolve/${slug}`);
-  
+
   if (!response.ok) {
     if (response.status === 404) {
-      throw new Error('Unidade não encontrada');
+      throw new SlugNotFoundError();
     }
     throw new Error('Erro ao resolver slug');
   }
-  
+
   return response.json();
 }
